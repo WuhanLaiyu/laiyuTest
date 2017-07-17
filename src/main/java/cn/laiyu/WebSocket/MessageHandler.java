@@ -10,6 +10,7 @@ import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.User.Vote;
 import cn.laiyu.PoJo.Vote.VoteObserver;
 import cn.laiyu.Util.TimeQuiz.CampiagnVoteQuiz;
+import cn.laiyu.Util.TimeQuiz.CommonVoteQuiz;
 import cn.laiyu.Util.TimeQuiz.VoteTimeQuiz;
 import com.alibaba.fastjson.JSONObject;
 
@@ -55,19 +56,28 @@ public class MessageHandler {
                 break;
             case "119" :
                 MessageHandle((VoteMessage) message,room);
+            case "120":
+                MessageHandle((RelayMessage)message,room);
         }
     }
-    public  static void MessageHandle(BeginVoteMessage message,Room room){
 
+    private static void MessageHandle(RelayMessage message, Room room) throws IOException {
+        GameBroadCast(room,JSONObject.toJSONString(message));
+    }
 
+    public  static void MessageHandle(BeginVoteMessage message,Room room) throws IOException {
+        message.statusCode="106";
+        GameBroadCast(room,JSONObject.toJSONString(message));
+        CommonVoteQuiz commonVoteQuiz=new CommonVoteQuiz(15,room);
+        Thread thread=new Thread(commonVoteQuiz);
+        thread.start();
     }
     public static void MessageHandle(VoteMessage message,Room room){}
 
     public static void MessageHandle(BeginCamiagnVoteMessage message,Room room) throws IOException {
         System.out.println("recived message to string"+JSONObject.toJSONString(message));
-        BaseMessage baseMessage=new BaseMessage();
-        baseMessage.statusCode="106";
-        GameBroadCast(room,JSONObject.toJSONString(baseMessage));
+        message.statusCode="106";
+        GameBroadCast(room,JSONObject.toJSONString(message));
         CampiagnVoteQuiz campiagnVoteQuiz=new CampiagnVoteQuiz(10,room);
         Thread thread=new Thread(campiagnVoteQuiz);
         thread.start();

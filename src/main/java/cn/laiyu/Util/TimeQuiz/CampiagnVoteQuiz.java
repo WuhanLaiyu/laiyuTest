@@ -128,6 +128,8 @@ public class CampiagnVoteQuiz implements Runnable{
         } catch (Exception e) {
             e.printStackTrace();
         }
+        voteResult.clear();
+        room.voteSubject.getVoteObservers().clear();
     }
 
 }

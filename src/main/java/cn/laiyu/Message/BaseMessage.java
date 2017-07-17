@@ -5,4 +5,5 @@ package cn.laiyu.Message;
  */
 public class BaseMessage {
     public String statusCode;
+
 }
