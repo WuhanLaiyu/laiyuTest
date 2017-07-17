@@ -15,10 +15,12 @@ public class VoteSubject implements VoteThreame {
 
     private List<IObserver> voteObservers=new CopyOnWriteArrayList<IObserver>();
 
+    public List<Integer> ticTag=new CopyOnWriteArrayList<>();
     @Override
     public void addObservers(IObserver observer) {
         System.out.println(((VoteObserver)observer).mySeatId);
         this.voteObservers.add(observer);
+
     }
 
     @Override
@@ -34,6 +36,7 @@ public class VoteSubject implements VoteThreame {
     @Override
     public void addCampaignObservers(Integer seatId) {
         this.campaignObservers.add(seatId);
+        this.ticTag.add(seatId);
     }
 
     public void eixtCampaignObservers(Integer seatId){ this.campaignObservers.remove(seatId);}
