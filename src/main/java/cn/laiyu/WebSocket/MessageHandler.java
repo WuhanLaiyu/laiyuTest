@@ -88,6 +88,7 @@ public class MessageHandler {
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
         camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
         camListResMes.statusCode="104";
+        camListResMes.ticTag=room.voteSubject.ticTag;
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
     }
 
@@ -109,10 +110,10 @@ public class MessageHandler {
 
 
     public static void MessageHandle(JoinCamiagnMessage message, Room room) throws IOException {
-        System.out.println("seatid_____________"+message.seatId);
         room.voteSubject.addCampaignObservers(message.seatId);
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
         camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
+        camListResMes.ticTag=room.voteSubject.ticTag;
         camListResMes.statusCode="104";
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
     }
