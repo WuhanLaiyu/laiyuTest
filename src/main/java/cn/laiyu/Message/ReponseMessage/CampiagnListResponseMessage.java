@@ -11,5 +11,5 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class CampiagnListResponseMessage extends BaseMessage {
     public List<Integer> campiagnList=new CopyOnWriteArrayList<>();
 
-    public List<Integer>  ticTag=new CopyOnWriteArrayList<>();
+    public List<String>  ticTag=new CopyOnWriteArrayList<>();
 }

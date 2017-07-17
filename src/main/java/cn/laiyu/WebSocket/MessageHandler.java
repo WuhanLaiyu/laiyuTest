@@ -3,6 +3,7 @@ package cn.laiyu.WebSocket;
 import cn.laiyu.Message.BaseMessage;
 
 import cn.laiyu.Message.ReponseMessage.CampiagnListResponseMessage;
+import cn.laiyu.Message.ReponseMessage.CampiagnMessage;
 import cn.laiyu.Message.ReponseMessage.CampiagnResponseMessage;
 
 import cn.laiyu.Message.RequestMessage.*;
@@ -58,6 +59,8 @@ public class MessageHandler {
                 MessageHandle((VoteMessage) message,room);
             case "120":
                 MessageHandle((RelayMessage)message,room);
+            case "141":
+                MessageHandle((RelayMessage)message,room);
         }
     }
 
@@ -76,6 +79,15 @@ public class MessageHandler {
 
     public static void MessageHandle(BeginCamiagnVoteMessage message,Room room) throws IOException {
         System.out.println("recived message to string"+JSONObject.toJSONString(message));
+        if(room.voteSubject.getCampaignObservers().size()==1){
+            Integer seatId=room.voteSubject.getCampaignObservers().get(0);
+            room.campiagnSeatId=seatId;
+            CampiagnMessage message1=new CampiagnMessage();
+            message1.campiagnSeatId=seatId;
+            message1.statusCode="140";
+            GameBroadCast(room,JSONObject.toJSONString(message1));
+            return;
+        }
         message.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(message));
         CampiagnVoteQuiz campiagnVoteQuiz=new CampiagnVoteQuiz(10,room);
