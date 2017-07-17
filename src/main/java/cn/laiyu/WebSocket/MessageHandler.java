@@ -50,14 +50,25 @@ public class MessageHandler {
             case "117" :
                 MessageHandle((BeginCamiagnVoteMessage)message,room);
                 break;
+            case "118" :
+                MessageHandle((BeginVoteMessage) message,room);
+                break;
+            case "119" :
+                MessageHandle((VoteMessage) message,room);
         }
     }
+    public  static void MessageHandle(BeginVoteMessage message,Room room){
+
+
+    }
+    public static void MessageHandle(VoteMessage message,Room room){}
 
     public static void MessageHandle(BeginCamiagnVoteMessage message,Room room) throws IOException {
+        System.out.println("recived message to string"+JSONObject.toJSONString(message));
         BaseMessage baseMessage=new BaseMessage();
         baseMessage.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(baseMessage));
-        CampiagnVoteQuiz campiagnVoteQuiz=new CampiagnVoteQuiz(5,room);
+        CampiagnVoteQuiz campiagnVoteQuiz=new CampiagnVoteQuiz(10,room);
         Thread thread=new Thread(campiagnVoteQuiz);
         thread.start();
     }
@@ -85,13 +96,13 @@ public class MessageHandler {
         int limitSec=5;
         //开启竞选模式
         CampiagnResponseMessage responseC=new CampiagnResponseMessage();
-        responseC.statusCode="103";
-        responseC.windowStant="1";
-        responseC.isCampiagnProcess="1";
+        responseC.statusCode=103;
+        responseC.windowStant=1;
+        responseC.isCampiagnProcess=1;
         GameBroadCast(room,JSONObject.toJSONString(responseC));
-        responseC.isCampiagnProcess="0";
+        responseC.isCampiagnProcess=0;
         String resMessage=JSONObject.toJSONString(responseC);
-        VoteTimeQuiz timeQuiz=new VoteTimeQuiz(15,resMessage,room);
+        VoteTimeQuiz timeQuiz=new VoteTimeQuiz(5,resMessage,room);
         Thread thread=new Thread(timeQuiz);
         thread.start();
     }
