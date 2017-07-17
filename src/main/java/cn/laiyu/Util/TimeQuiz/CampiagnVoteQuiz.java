@@ -1,5 +1,6 @@
 package cn.laiyu.Util.TimeQuiz;
 
+import cn.laiyu.Message.ReponseMessage.ResTimeMessage;
 import cn.laiyu.Message.ReponseMessage.VoteResultResMessage;
 import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.Seat.SeatState;
@@ -23,7 +24,7 @@ public class CampiagnVoteQuiz implements Runnable{
 
     private Room  room;
 
-    public ConcurrentHashMap<String,ArrayList<String>> voteResult=new ConcurrentHashMap<String,ArrayList<String>>();
+    public  ConcurrentHashMap<String,ArrayList<String>> voteResult=new ConcurrentHashMap<String,ArrayList<String>>();
 
     public CampiagnVoteQuiz(int limitSec,Room room){
         this.limitSec=limitSec;
@@ -33,7 +34,15 @@ public class CampiagnVoteQuiz implements Runnable{
     public void run( ) {
         while(limitSec > 0){
             --limitSec;
-            System.out.println("vote remain sceconds:"+limitSec);
+            ResTimeMessage resTimeMessage=new ResTimeMessage();
+            resTimeMessage.lastTime=limitSec;
+            resTimeMessage.statusCode=131;
+            try {
+                GameBroadCast(room, JSON.toJSONString(resTimeMessage));}
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("remain sceconds:"+limitSec);
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
@@ -41,28 +50,34 @@ public class CampiagnVoteQuiz implements Runnable{
             }
         }
 
+
+        
         List list=room.voteSubject.getVoteObservers();
-
         for (int i=0;i<list.size();i++){
-           VoteObserver voteObserver=(VoteObserver)(list.get(i));
-           ArrayList<String> tempArr=voteResult.get(voteObserver.tagetSeatId);
-           if(tempArr==null){
-               System.out.println("null login!!!!");
-               tempArr=new ArrayList<String>();
-               tempArr.add(String.valueOf(voteObserver.mySeatId));
-               voteResult.put(voteObserver.tagetSeatId+"",tempArr);
 
-           }else{
-               System.out.println("not null!!!!");
-               voteResult.get(voteObserver.tagetSeatId).add(String.valueOf(voteObserver.mySeatId));
-           }
-
+            VoteObserver voteObserver=(VoteObserver)(list.get(i));
+            System.out.println("tagetSeatId:"+voteObserver.tagetSeatId);
+            System.out.println("mySeatId:"+voteObserver.mySeatId);
+            ArrayList<String> tempArr=voteResult.get(voteObserver.tagetSeatId+"");
+            if(tempArr==null){
+                System.out.println("list is null");
+                tempArr =new ArrayList<String>();
+            }
+//            if(tempArr==null){
+//               System.out.println("null login!!!!");
+//               tempArr=new ArrayList<String>();
+//               tempArr.add(String.valueOf(voteObserver.mySeatId));
+//               voteResult.put(voteObserver.tagetSeatId+"",tempArr);
+//           }else{
+//               System.out.println("not null!!!!");
+//               voteResult.get(voteObserver.tagetSeatId).add(String.valueOf(voteObserver.mySeatId));
+//           }
+            tempArr.add(String.valueOf(voteObserver.mySeatId));
+            voteResult.put(voteObserver.tagetSeatId+"",tempArr);
         }
-
         Iterator<Map.Entry<String,ArrayList<String>>> it = voteResult.entrySet().iterator();
         int flag=0;
         while(it.hasNext()){
-
             Map.Entry entry = (Map.Entry) it.next();
             if(entry.getKey()!=null){
             List temp=(List)entry.getValue();
@@ -73,11 +88,13 @@ public class CampiagnVoteQuiz implements Runnable{
             }
         }
         Iterator<Map.Entry<String,ArrayList<String>>> it1 = voteResult.entrySet().iterator();
-
         CopyOnWriteArrayList<String> plaTic=new CopyOnWriteArrayList<String>();
         while(it1.hasNext()){
             Map.Entry entry = (Map.Entry) it1.next();
             List temp=(List)entry.getValue();
+            if(entry.getKey()=="0"){
+                continue;
+            }
             int size =temp.size();
             if(size==flag){
                 plaTic.add(""+entry.getKey());
@@ -89,33 +106,28 @@ public class CampiagnVoteQuiz implements Runnable{
         voteResultResMessage.ticTag=plaTic;
         voteResultResMessage.voteResult=voteResult;
         voteResultResMessage.statusCode="105";
-
         System.out.println(room.voteSubject.getCampaignObservers().size());
-        if(room.voteSubject.getCampaignObservers().size()==1){
-            System.out.println("okokJiaRuWoDeHangLie"+room.voteSubject.getCampaignObservers().get(0));
-            voteResultResMessage.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0)+"";
-            room.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0);
-            this.room.voteSubject.getCampaignObservers().clear();
+        if(room.voteSubject.getCampaignObservers().size()<=1){
+            Integer maxVoteNum=room.voteSubject.getCampaignObservers().get(0);
+            if(maxVoteNum==null){
+                voteResultResMessage.campiagnSeatId=null;
+                room.campiagnSeatId=null;
+                //  room.exitGame(openId);
+                this.room.voteSubject.getCampaignObservers().clear();
+            }else {
+                voteResultResMessage.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0)+"";
+                room.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0);
+                String openId=room.getPlaySet().get(maxVoteNum).playUser.getOpenId();
+                //  room.exitGame(openId);
+                this.room.voteSubject.getCampaignObservers().clear();}
+
         }
         String message= JSON.toJSONString(voteResultResMessage);
         try {
             GameBroadCast(room, message);
-            System.out.println(room.campiagnSeatId);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
-    }
-    public static  void main(String args[]) {
-        ConcurrentHashMap<String, ArrayList<String>> voteResult = new ConcurrentHashMap<String, ArrayList<String>>();
-        System.out.println(voteResult.get("1"));
-        ArrayList<String> tempArr = voteResult.get("1");
-        if (tempArr==null) {
-            tempArr=new ArrayList<String>();
-            tempArr.add("2");
-            voteResult.put("1",tempArr);
-            System.out.println(voteResult.get("1"));
-        }
-    }
 }

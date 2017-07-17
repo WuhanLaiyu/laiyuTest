@@ -12,6 +12,7 @@ import cn.laiyu.Util.Encoder.MessageEncoder;
 
 import cn.laiyu.Util.ParamDetermine.MapToBean;
 import com.alibaba.fastjson.JSON;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -62,7 +63,7 @@ public class RoomWebSocket {
         room.getPlaySet().put(1, seatState);
         rooms.put(10001, room);
     }
-
+    @ApiOperation(value="获取用户列表", notes="")
     @OnOpen
     public void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {
         this.session = session;
@@ -146,7 +147,6 @@ public class RoomWebSocket {
     }
 
     public static void GameBroadCast(Room myRoom,String message) throws IOException {
-
         for (User item :
                 myRoom.getUserSet()) {
             item.getSession().getBasicRemote().sendText(message);
