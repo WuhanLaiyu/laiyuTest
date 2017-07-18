@@ -1,5 +1,6 @@
 package cn.laiyu.Util.TimeQuiz;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.Message.ReponseMessage.ResTimeMessage;
 import cn.laiyu.PoJo.Room.Room;
 import com.alibaba.fastjson.JSON;
@@ -44,6 +45,7 @@ public class VoteTimeQuiz implements Runnable{
 
         try {
             GameBroadCast(room, message);
+            LaiyudebugApplication.logger.info(room.getRoomID()+"房间警长竞选结束");
         } catch (IOException e) {
             e.printStackTrace();
         }

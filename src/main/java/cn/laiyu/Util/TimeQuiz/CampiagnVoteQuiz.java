@@ -1,5 +1,6 @@
 package cn.laiyu.Util.TimeQuiz;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.Message.ReponseMessage.ResTimeMessage;
 import cn.laiyu.Message.ReponseMessage.VoteResultResMessage;
 import cn.laiyu.PoJo.Room.Room;
@@ -49,7 +50,7 @@ public class CampiagnVoteQuiz implements Runnable{
                 e.printStackTrace();
             }
         }
-
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间的警长竞选投票结束");
 
         
         List list=room.voteSubject.getVoteObservers();

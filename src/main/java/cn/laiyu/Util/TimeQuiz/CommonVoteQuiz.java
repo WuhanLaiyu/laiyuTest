@@ -57,7 +57,7 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
                 e.printStackTrace();
             }
         }
-
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间的投票结束");
         List voteObServers=room.voteSubject.getVoteObservers();
         for (int i=0;i<voteObServers.size();i++){
             VoteObserver voteObserve=(VoteObserver) voteObServers.get(i);

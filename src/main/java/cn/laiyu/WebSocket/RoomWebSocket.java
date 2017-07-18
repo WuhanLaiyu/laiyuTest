@@ -1,5 +1,6 @@
 package cn.laiyu.WebSocket;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.Message.BaseMessage;
 import cn.laiyu.Message.ReponseMessage.RoomMessage;
 import cn.laiyu.PoJo.Room.Room;
@@ -79,7 +80,9 @@ public class RoomWebSocket {
             myRoom.joinRoom(user);
             String message = getHomeStructure(myRoom);
             GameBroadCast(myRoom,message);
+            LaiyudebugApplication.logger.info(user.getOpenId()+"加入了房间"+roomId);
         }
+
     }
 
     @OnClose
@@ -89,6 +92,7 @@ public class RoomWebSocket {
         myRoom.exitRoom(user);
         String message = getHomeStructure(myRoom);
         GameBroadCast(myRoom,message);
+        LaiyudebugApplication.logger.info(user.getOpenId()+"退出了房间"+roomId);
     }
 
     @OnMessage

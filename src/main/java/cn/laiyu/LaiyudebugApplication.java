@@ -23,6 +23,7 @@ public class LaiyudebugApplication {
     private Environment env;
 
     public static Logger logger=LogManager.getLogger();
+
     public static void main(String[] args) {
         SpringApplication.run(LaiyudebugApplication.class, args);
     }

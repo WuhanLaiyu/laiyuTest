@@ -1,5 +1,6 @@
 package cn.laiyu.WebSocket;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.Message.BaseMessage;
 
 import cn.laiyu.Message.ReponseMessage.CampiagnListResponseMessage;
@@ -100,6 +101,7 @@ public class MessageHandler {
     public  static void MessageHandle(BeginVoteMessage message,Room room) throws IOException {
         message.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(message));
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间开始投票");
         CommonVoteQuiz commonVoteQuiz=new CommonVoteQuiz(15,room);
         Thread thread=new Thread(commonVoteQuiz);
         thread.start();
@@ -118,6 +120,7 @@ public class MessageHandler {
         }
         message.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(message));
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间警长投票开始");
         CampiagnVoteQuiz campiagnVoteQuiz=new CampiagnVoteQuiz(10,room);
         Thread thread=new Thread(campiagnVoteQuiz);
         thread.start();
@@ -130,11 +133,13 @@ public class MessageHandler {
         voter.mySeatId=message.getSeatId();
         System.out.println( voter.tagetSeatId);
         room.voteSubject.addObservers(voter);
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间警长投票中"+message.getSeatId()+"号玩家投票"+message.getTargetId()+"号玩家");
     }
 
 
     public static void MessageHandle(ExitCamiagnMessage message,Room room) throws IOException {
         room.voteSubject.eixtCampaignObservers(message.seatId);
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间的"+message.seatId+"号玩家退出了警长竞选");
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
         camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
         camListResMes.statusCode="104";
@@ -151,6 +156,7 @@ public class MessageHandler {
         responseC.windowStant=1;
         responseC.isCampiagnProcess=1;
         GameBroadCast(room,JSONObject.toJSONString(responseC));
+        LaiyudebugApplication.logger.info("房间"+room.getRoomID()+"开始了警长竞选");
         responseC.isCampiagnProcess=0;
         String resMessage=JSONObject.toJSONString(responseC);
         VoteTimeQuiz timeQuiz=new VoteTimeQuiz(5,resMessage,room);
@@ -161,6 +167,7 @@ public class MessageHandler {
 
     public static void MessageHandle(JoinCamiagnMessage message, Room room) throws IOException {
         room.voteSubject.addCampaignObservers(message.seatId);
+        LaiyudebugApplication.logger.info(room.getRoomID()+"房间的"+message.seatId+"号玩家加入了警长竞选");
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
         camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
         camListResMes.ticTag=room.voteSubject.ticTag;

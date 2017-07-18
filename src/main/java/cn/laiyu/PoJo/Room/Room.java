@@ -1,5 +1,6 @@
 package cn.laiyu.PoJo.Room;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.PoJo.Seat.SeatState;
 import cn.laiyu.PoJo.User.PlayUser;
 import cn.laiyu.PoJo.User.User;
@@ -139,6 +140,7 @@ public class Room {
         temp.seatState=0;
         temp.playUser=null;
         playSet.put(seadId,temp);
+        LaiyudebugApplication.logger.info(openId+"退出了房间"+roomID+"的游戏");
 
     }
     public void joinGame(Integer seatId, String openId) {
@@ -161,6 +163,7 @@ public class Room {
         seatState.seatState=1;
         this.restSet.remove(temp);
         this.playSet.put(seatId,seatState);
+        LaiyudebugApplication.logger.info(openId+"加入了房间"+roomID+"的游戏");
 
     }
 

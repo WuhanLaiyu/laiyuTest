@@ -1,5 +1,6 @@
 package cn.laiyu.PoJo.Vote;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.User.Vote;
 
