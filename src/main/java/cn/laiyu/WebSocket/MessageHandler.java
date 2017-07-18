@@ -10,6 +10,7 @@ import cn.laiyu.Message.RequestMessage.*;
 import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.User.Vote;
 import cn.laiyu.PoJo.Vote.VoteObserver;
+import cn.laiyu.PoJo.Vote.VoteSubject;
 import cn.laiyu.Util.TimeQuiz.CampiagnVoteQuiz;
 import cn.laiyu.Util.TimeQuiz.CommonVoteQuiz;
 import cn.laiyu.Util.TimeQuiz.VoteTimeQuiz;
@@ -55,13 +56,41 @@ public class MessageHandler {
             case "118" :
                 MessageHandle((BeginVoteMessage) message,room);
                 break;
-            case "119" :
-                MessageHandle((VoteMessage) message,room);
             case "120":
                 MessageHandle((RelayMessage)message,room);
+                break;
             case "141":
                 MessageHandle((RelayMessage)message,room);
+                break;
+            case "142":
+                MessageHandle((ReplayMessage)message,room);
+            case "109":
+                MessageHandle((SeatStatusMessage)message,room);
+
         }
+    }
+
+    private static void MessageHandle(SeatStatusMessage message, Room room){
+        int seatState=room.getPlaySet().get(message.getSeatId()).seatState;
+        if(seatState==0){
+            room.getPlaySet().get(message.getSeatId()).seatState=-1;
+        }else{
+            room.getPlaySet().get(message.getSeatId()).seatState=0;
+        }
+        String message1=RoomWebSocket.getHomeStructure(room);
+        try {
+            GameBroadCast(room,message1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void MessageHandle(ReplayMessage message, Room room) {
+        room.voteSubject=new VoteSubject();
+        room.campiagnSeatId=null;
+
+
     }
 
     private static void MessageHandle(RelayMessage message, Room room) throws IOException {
@@ -75,7 +104,6 @@ public class MessageHandler {
         Thread thread=new Thread(commonVoteQuiz);
         thread.start();
     }
-    public static void MessageHandle(VoteMessage message,Room room){}
 
     public static void MessageHandle(BeginCamiagnVoteMessage message,Room room) throws IOException {
         System.out.println("recived message to string"+JSONObject.toJSONString(message));

@@ -75,9 +75,9 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
             Map.Entry<String,ArrayList<String>> entry=it.next();
             if(entry.getKey()!=null){
                 List temp=(List)entry.getValue();
-                int size =temp.size();
+                double size =temp.size();
                 if(temp.contains(room.campiagnSeatId+"")){
-                    flag=size+0.5;
+                   size+=0.5;
                 }
                 if(size>flag){
                     flag=size;

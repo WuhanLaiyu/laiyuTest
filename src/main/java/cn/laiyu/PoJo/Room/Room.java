@@ -71,7 +71,7 @@ public class Room {
     /*
     * seatState:0 没有人坐
     *           1 有人坐
-    *           2 位置关闭
+    *           -1 位置关闭
     * */
     public void initRoom( ) {
         for (int i = 1; i <= 12; i++) {

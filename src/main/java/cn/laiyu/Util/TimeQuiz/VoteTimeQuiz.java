@@ -30,7 +30,8 @@ public class VoteTimeQuiz implements Runnable{
             resTimeMessage.lastTime=limitSec;
             resTimeMessage.statusCode=131;
             try {
-                GameBroadCast(room, JSON.toJSONString(resTimeMessage)); } catch (IOException e) {
+                GameBroadCast(room, JSON.toJSONString(resTimeMessage));
+            } catch (IOException e) {
                 e.printStackTrace();
             }
             System.out.println("remain sceconds:"+limitSec);
