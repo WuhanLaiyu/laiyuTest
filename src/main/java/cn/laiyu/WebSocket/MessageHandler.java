@@ -74,6 +74,10 @@ public class MessageHandler {
                 break;
             case "112":
                 MessageHandle((PoloceRestMessage)message,room);
+                break;
+            case "150":
+                MessageHandle((RelayMessage)message,room);
+                break;
         }
     }
 
@@ -115,8 +119,11 @@ public class MessageHandler {
     private static void MessageHandle(ReplayMessage message, Room room) {
         room.voteSubject=new VoteSubject();
         room.campiagnSeatId=null;
-
-
+        try {
+            GameBroadCast(room,JSONObject.toJSONString(message));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void MessageHandle(RelayMessage message, Room room) throws IOException {
@@ -206,11 +213,13 @@ public class MessageHandler {
 
     public static void MessageHandle(JoinGameMessage message,Room room) throws IOException {
         room.joinGame(message.getSeatId(),message.getOpenId());
+        System.out.println("上座"+message.getOpenId());
         String homeStructure = getHomeStructure(room);
         GameBroadCast(room,homeStructure);
     }
     public static void MessageHandle(RestGameMessage message,Room room) throws IOException {
         room.exitGame(message.getOpenId());
+        System.out.println("下座"+message.getOpenId());
         String homeStructure = getHomeStructure(room);
         GameBroadCast(room,homeStructure);
     }

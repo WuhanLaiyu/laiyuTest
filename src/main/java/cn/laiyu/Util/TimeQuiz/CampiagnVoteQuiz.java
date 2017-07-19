@@ -93,7 +93,7 @@ public class CampiagnVoteQuiz implements Runnable{
         while(it1.hasNext()){
             Map.Entry entry = (Map.Entry) it1.next();
             List temp=(List)entry.getValue();
-            if(entry.getKey()=="0"){
+            if(entry.getKey().equals("0")){
                 continue;
             }
             int size =temp.size();
