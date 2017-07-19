@@ -34,8 +34,10 @@ public class CreateRoom {
     @RequestMapping("/create")
     public void createRoom(HttpServletRequest request, HttpServletResponse response) {
         String openId = request.getParameter("openId");
+        String imagePath=request.getParameter("imagePath");
         User user = new User();
         user.setOpenId(openId);
+        user.setImagePath(imagePath);
 
         RoomDTO roomDTO = new RoomDTO();
         roomDTO.setUserName(user.getOpenId());

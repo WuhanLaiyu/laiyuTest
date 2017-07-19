@@ -1,6 +1,7 @@
 package cn.laiyu.Util.TimeQuiz;
 
 import cn.laiyu.LaiyudebugApplication;
+import cn.laiyu.Message.BaseMessage;
 import cn.laiyu.Message.ReponseMessage.ResTimeMessage;
 import cn.laiyu.Message.ReponseMessage.VoteResultResMessage;
 import cn.laiyu.PoJo.Room.Room;
@@ -11,6 +12,7 @@ import cn.laiyu.PoJo.Vote.IObserver;
 import cn.laiyu.PoJo.Vote.VoteObserver;
 import cn.laiyu.WebSocket.RoomWebSocket;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.sun.org.glassfish.external.statistics.Stats;
 import com.sun.xml.internal.fastinfoset.util.StringArray;
 
@@ -24,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
 import static cn.laiyu.WebSocket.RoomWebSocket.GameBroadCast;
+import static cn.laiyu.WebSocket.RoomWebSocket.oneBroadCast;
 
 /**
  * Created by Administrator on 2017/7/17.
@@ -102,7 +105,7 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
         message.ticTag=platic;
         message.voteResult=voteResult;
         message.statusCode="105";
-        voteResult.clear();
+
 
         try {
             GameBroadCast(room,JSON.toJSONString(message));
@@ -124,6 +127,14 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            BaseMessage message2=new BaseMessage();
+            message2.statusCode="111";
+            try {
+                oneBroadCast(room, JSONObject.toJSONString(message2),playUser.getOpenId());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
         room.voteSubject.getVoteObservers().clear();
         room.voteSubject.getCampaignObservers().clear();

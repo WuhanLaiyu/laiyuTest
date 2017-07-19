@@ -65,9 +65,34 @@ public class MessageHandler {
                 break;
             case "142":
                 MessageHandle((ReplayMessage)message,room);
+                break;
             case "109":
                 MessageHandle((SeatStatusMessage)message,room);
+                break;
+            case "110":
+                MessageHandle((ChangePoliceMessage)message,room);
+                break;
+            case "112":
+                MessageHandle((PoloceRestMessage)message,room);
+        }
+    }
 
+    private static void MessageHandle(PoloceRestMessage message, Room room) {
+        room.campiagnSeatId=null;
+        try {
+            GameBroadCast(room,JSONObject.toJSONString(message));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private static void MessageHandle(ChangePoliceMessage message, Room room) {
+        room.campiagnSeatId=message.getSeatId();
+        try {
+            GameBroadCast(room,JSONObject.toJSONString(message));
+        } catch (IOException e){
+            e.printStackTrace();
         }
     }
 

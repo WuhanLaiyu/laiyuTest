@@ -60,6 +60,12 @@ public class MessageDecoder implements Decoder.Text<BaseMessage> {
             case "109":
                 baseMessage=new SeatStatusMessage();
                 break;
+            case "110":
+                baseMessage=new ChangePoliceMessage();
+                break;
+            case "112":
+                baseMessage=new PoloceRestMessage();
+                break;
 
         }
         baseMessage= JSON.parseObject(s,baseMessage.getClass());

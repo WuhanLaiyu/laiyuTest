@@ -109,6 +109,7 @@ public class RoomWebSocket {
         RoomMessage roomMessage = new RoomMessage();
         roomMessage.statusCode = 201;
         roomMessage.homeOwner = myRoom.getHomeOwner().getOpenId();
+        roomMessage.imagePath=myRoom.getHomeOwner().getImagePath();
 
         ArrayList<UserDTO> restSet = new ArrayList<>();
         Iterator<Map.Entry<User, Integer>> iter = myRoom.getRestSet().entrySet().iterator();
@@ -155,6 +156,15 @@ public class RoomWebSocket {
         }
 
     }
+
+    public static void oneBroadCast(Room myRoom,String message,String openId) throws IOException {
+        for(User item:myRoom.getUserSet()){
+            if(item.getOpenId().equals(openId)){
+                item.getSession().getBasicRemote().sendText(message);
+            }
+        }
+    }
+
     public static void roomUnExitErrorBroadCast(Session session) throws IOException {
         Map<Object, Object> roomErrorMessage = new HashMap<Object, Object>();
         roomErrorMessage.put("statusCode", 401);
