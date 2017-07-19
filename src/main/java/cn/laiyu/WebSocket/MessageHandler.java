@@ -134,7 +134,7 @@ public class MessageHandler {
         message.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(message));
         LaiyudebugApplication.logger.info(room.getRoomID()+"房间开始投票");
-        CommonVoteQuiz commonVoteQuiz=new CommonVoteQuiz(15,room);
+        CommonVoteQuiz commonVoteQuiz=new CommonVoteQuiz(10,room);
         Thread thread=new Thread(commonVoteQuiz);
         thread.start();
     }
@@ -213,13 +213,11 @@ public class MessageHandler {
 
     public static void MessageHandle(JoinGameMessage message,Room room) throws IOException {
         room.joinGame(message.getSeatId(),message.getOpenId());
-        System.out.println("上座"+message.getOpenId());
         String homeStructure = getHomeStructure(room);
         GameBroadCast(room,homeStructure);
     }
     public static void MessageHandle(RestGameMessage message,Room room) throws IOException {
         room.exitGame(message.getOpenId());
-        System.out.println("下座"+message.getOpenId());
         String homeStructure = getHomeStructure(room);
         GameBroadCast(room,homeStructure);
     }
