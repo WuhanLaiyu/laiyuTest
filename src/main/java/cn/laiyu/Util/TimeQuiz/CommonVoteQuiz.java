@@ -76,6 +76,9 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
         double flag=0;
         while(it.hasNext()){
             Map.Entry<String,ArrayList<String>> entry=it.next();
+            if(entry.getKey().equals("0")){
+                continue;
+            }
             if(entry.getKey()!=null){
                 List temp=(List)entry.getValue();
                 double size =temp.size();
