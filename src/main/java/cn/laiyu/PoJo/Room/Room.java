@@ -93,23 +93,46 @@ public class Room {
         this.restSet.put(user, 0);
     }
 
-
     public int exitRoom(User user) {
         int flag = 0;
         this.userSet.remove(user);
-
-        if (user.getClass().equals(PlayUser.class)) {
+        int f=0;
+        Iterator<Map.Entry<Integer,SeatState>> itr=this.playSet.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry<Integer,SeatState> entry= itr.next();
+            if(entry.getValue().playUser==null){
+                continue;
+            }
+             if(user.getOpenId().equals(entry.getValue().playUser.getOpenId())){
+                 f=1;
+                 break;
+             }
+        }
+        if (f==1) {
             Iterator<Map.Entry<Integer, SeatState>> it = this.playSet.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Integer, SeatState> entry = (Map.Entry) it.next();
-                if (entry.getValue().playUser.equals(user)) {
-                    this.playSet.remove(entry.getKey(), entry.getValue());
+                if(entry.getValue().playUser==null){
+                    continue;
+                }
+                if (user.getOpenId().equals(entry.getValue().playUser.getOpenId())) {
+                    SeatState seatState=new SeatState();
+                    seatState.seatState=0;
+                    seatState.playUser=null;
+                    this.playSet.put(entry.getKey(),seatState);
                     flag = 1;
                     break;
                 }
             }
         } else {
-            restSet.remove(user);
+            Iterator<Map.Entry<User, Integer>> it = this.restSet.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry<User,Integer> entry=it.next();
+                if(entry.getKey().getOpenId().equals(user.getOpenId())){
+                    it.remove();
+                    break;
+                }
+            }
             flag = 1;
         }
 
@@ -145,7 +168,6 @@ public class Room {
     }
     public void joinGame(Integer seatId, String openId) {
         SeatState seatState=this.playSet.get(seatId);
-
         User temp=new User();
         Iterator<Map.Entry<User,Integer>> it = this.restSet.entrySet().iterator();
         while (it.hasNext()){

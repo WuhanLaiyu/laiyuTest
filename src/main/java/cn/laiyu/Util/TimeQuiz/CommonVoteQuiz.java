@@ -94,6 +94,9 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
             Map.Entry<String,ArrayList<String>> entyr=it1.next();
             List temp=(List)entyr.getValue();
             double size =temp.size();
+            if(entyr.getKey().equals("0")){
+                continue;
+            }
             if(temp.contains(room.campiagnSeatId+"")){
                 size+=0.5;
             }
@@ -114,28 +117,31 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
         }
 
         if(platic.size()==1){
-            SeatState state=room.getPlaySet().get(Integer.parseInt(platic.get(0)));
-            PlayUser playUser=state.playUser;
-            state.playUser=null;
-            state.seatState=-1;
-            room.getPlaySet().put(Integer.parseInt(platic.get(0)),state);
-            User user=(User)playUser;
-            room.getRestSet().put(user,0);
-            String message1= RoomWebSocket.getHomeStructure(room);
-            try {
-                GameBroadCast(room,message1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            BaseMessage message2=new BaseMessage();
-            message2.statusCode="111";
-            try {
-                oneBroadCast(room, JSONObject.toJSONString(message2),playUser.getOpenId());
-            } catch (IOException e) {
-                e.printStackTrace();
+            SeatState state=room.getPlaySet().get(Integer.parseInt(platic.get(0)));//可能存在弃票人数最多的情况
+            if(state!=null) {
+                PlayUser playUser = state.playUser;
+                state.playUser = null;
+                state.seatState = -1;
+                room.getPlaySet().put(Integer.parseInt(platic.get(0)), state);
+                User user = (User) playUser;
+                room.getRestSet().put(user, 0);
+                String message1 = RoomWebSocket.getHomeStructure(room);
+                try {
+                    GameBroadCast(room, message1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                BaseMessage message2 = new BaseMessage();
+                message2.statusCode = "111";
+                try {
+                    oneBroadCast(room, JSONObject.toJSONString(message2), playUser.getOpenId());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         }
+        voteResult.clear();
         room.voteSubject.getVoteObservers().clear();
         room.voteSubject.getCampaignObservers().clear();
     }
