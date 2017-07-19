@@ -16,6 +16,8 @@ public class RoomMessage {
 
     public String homeOwner;
 
+    public String imagePath;
+
     public ArrayList<UserDTO> restSet;
 
     public HashMap<String, UserDTO> playSet;

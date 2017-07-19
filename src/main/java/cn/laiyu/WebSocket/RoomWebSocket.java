@@ -1,5 +1,6 @@
 package cn.laiyu.WebSocket;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.Message.BaseMessage;
 import cn.laiyu.Message.ReponseMessage.RoomMessage;
 import cn.laiyu.PoJo.Room.Room;
@@ -12,7 +13,6 @@ import cn.laiyu.Util.Encoder.MessageEncoder;
 
 import cn.laiyu.Util.ParamDetermine.MapToBean;
 import com.alibaba.fastjson.JSON;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -63,7 +63,6 @@ public class RoomWebSocket {
         room.getPlaySet().put(1, seatState);
         rooms.put(10001, room);
     }
-    @ApiOperation(value="获取用户列表", notes="")
     @OnOpen
     public void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {
         this.session = session;
@@ -81,7 +80,9 @@ public class RoomWebSocket {
             myRoom.joinRoom(user);
             String message = getHomeStructure(myRoom);
             GameBroadCast(myRoom,message);
+            LaiyudebugApplication.logger.info(user.getOpenId()+"加入了房间"+roomId);
         }
+
     }
 
     @OnClose
@@ -91,6 +92,7 @@ public class RoomWebSocket {
         myRoom.exitRoom(user);
         String message = getHomeStructure(myRoom);
         GameBroadCast(myRoom,message);
+        LaiyudebugApplication.logger.info(user.getOpenId()+"退出了房间"+roomId);
     }
 
     @OnMessage
@@ -107,6 +109,7 @@ public class RoomWebSocket {
         RoomMessage roomMessage = new RoomMessage();
         roomMessage.statusCode = 201;
         roomMessage.homeOwner = myRoom.getHomeOwner().getOpenId();
+        roomMessage.imagePath=myRoom.getHomeOwner().getImagePath();
 
         ArrayList<UserDTO> restSet = new ArrayList<>();
         Iterator<Map.Entry<User, Integer>> iter = myRoom.getRestSet().entrySet().iterator();
@@ -153,6 +156,15 @@ public class RoomWebSocket {
         }
 
     }
+
+    public static void oneBroadCast(Room myRoom,String message,String openId) throws IOException {
+        for(User item:myRoom.getUserSet()){
+            if(item.getOpenId().equals(openId)){
+                item.getSession().getBasicRemote().sendText(message);
+            }
+        }
+    }
+
     public static void roomUnExitErrorBroadCast(Session session) throws IOException {
         Map<Object, Object> roomErrorMessage = new HashMap<Object, Object>();
         roomErrorMessage.put("statusCode", 401);

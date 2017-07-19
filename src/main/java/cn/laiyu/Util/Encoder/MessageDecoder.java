@@ -45,6 +45,28 @@ public class MessageDecoder implements Decoder.Text<BaseMessage> {
             case "117" :
                 baseMessage=new BeginCamiagnVoteMessage();
                 break;
+            case "118":
+                baseMessage=new BeginVoteMessage();
+                break;
+            case "120":
+                baseMessage=new RelayMessage();
+                break;
+            case "141":
+                baseMessage=new RelayMessage();
+                break;
+            case "142":
+                baseMessage=new ReplayMessage();
+                break;
+            case "109":
+                baseMessage=new SeatStatusMessage();
+                break;
+            case "110":
+                baseMessage=new ChangePoliceMessage();
+                break;
+            case "112":
+                baseMessage=new PoloceRestMessage();
+                break;
+
         }
         baseMessage= JSON.parseObject(s,baseMessage.getClass());
 

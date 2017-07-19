@@ -1,5 +1,6 @@
 package cn.laiyu.PoJo.Vote;
 
+import cn.laiyu.LaiyudebugApplication;
 import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.User.Vote;
 
@@ -15,7 +16,7 @@ public class VoteSubject implements VoteThreame {
 
     private List<IObserver> voteObservers=new CopyOnWriteArrayList<IObserver>();
 
-    public List<Integer> ticTag=new CopyOnWriteArrayList<>();
+    public List<String> ticTag=new CopyOnWriteArrayList<>();
     @Override
     public void addObservers(IObserver observer) {
         System.out.println(((VoteObserver)observer).mySeatId);
@@ -36,7 +37,7 @@ public class VoteSubject implements VoteThreame {
     @Override
     public void addCampaignObservers(Integer seatId) {
         this.campaignObservers.add(seatId);
-        this.ticTag.add(seatId);
+        this.ticTag.add(seatId+"");
     }
 
     public void eixtCampaignObservers(Integer seatId){ this.campaignObservers.remove(seatId);}
