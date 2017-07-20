@@ -9,7 +9,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * Created by humac on 2017/7/11.
  */
 public class CampiagnListResponseMessage extends BaseMessage {
-    public List<Integer> campiagnList=new CopyOnWriteArrayList<>();
+    public List<String> campiagnList=new CopyOnWriteArrayList<>();
 
     public List<String>  ticTag=new CopyOnWriteArrayList<>();
 }
