@@ -148,4 +148,5 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
         room.voteSubject.getVoteObservers().clear();
         room.voteSubject.getCampaignObservers().clear();
     }
+
 }

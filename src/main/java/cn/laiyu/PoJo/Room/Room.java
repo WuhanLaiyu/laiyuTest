@@ -166,8 +166,11 @@ public class Room {
         LaiyudebugApplication.logger.info(openId+"退出了房间"+roomID+"的游戏");
 
     }
-    public void joinGame(Integer seatId, String openId) {
+    public synchronized void joinGame(Integer seatId, String openId) {
         SeatState seatState=this.playSet.get(seatId);
+        if(seatState.seatState==1){
+            return;
+        }
         User temp=new User();
         Iterator<Map.Entry<User,Integer>> it = this.restSet.entrySet().iterator();
         while (it.hasNext()){
