@@ -173,7 +173,9 @@ public class MessageHandler {
         room.voteSubject.eixtCampaignObservers(message.seatId);
         LaiyudebugApplication.logger.info(room.getRoomID()+"房间的"+message.seatId+"号玩家退出了警长竞选");
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
-        camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
+        for(Integer str:room.voteSubject.getCampaignObservers()){
+            camListResMes.campiagnList.add(String.valueOf(str));
+        }
         camListResMes.statusCode="104";
         camListResMes.ticTag=room.voteSubject.ticTag;
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
@@ -201,7 +203,9 @@ public class MessageHandler {
         room.voteSubject.addCampaignObservers(message.seatId);
         LaiyudebugApplication.logger.info(room.getRoomID()+"房间的"+message.seatId+"号玩家加入了警长竞选");
         CampiagnListResponseMessage camListResMes=new CampiagnListResponseMessage();
-        camListResMes.campiagnList=room.voteSubject.getCampaignObservers();
+        for(Integer str:room.voteSubject.getCampaignObservers()){
+            camListResMes.campiagnList.add(String.valueOf(str));
+        }
         camListResMes.ticTag=room.voteSubject.ticTag;
         camListResMes.statusCode="104";
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
