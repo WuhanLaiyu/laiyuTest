@@ -68,6 +68,7 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
                 list=new ArrayList<>();
             }
             list.add(voteObserve.mySeatId+"");
+            System.out.println("集合"+list);
             voteResult.put(voteObserve.tagetSeatId+"",list);
         }
 
