@@ -150,6 +150,13 @@ public class MessageHandler {
             GameBroadCast(room,JSONObject.toJSONString(message1));
             return;
         }
+        if(room.voteSubject.getCampaignObservers().size()==0){
+            CampiagnMessage message1=new CampiagnMessage();
+            message1.campiagnSeatId=0;
+            message1.statusCode="140";
+            GameBroadCast(room,JSONObject.toJSONString(message1));
+            return;
+        }
         message.statusCode="106";
         GameBroadCast(room,JSONObject.toJSONString(message));
         LaiyudebugApplication.logger.info(room.getRoomID()+"房间警长投票开始");
