@@ -109,8 +109,8 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
         }
 
         if(platic.size()>1){
-            for (String seatId:platic){
                 room.voteSubject.ticTag.clear();
+            for (String seatId:platic){
                 room.voteSubject.ticTag.add(seatId);
             }
         }
