@@ -20,6 +20,7 @@ public class Room {
 
     public VoteSubject voteSubject =new VoteSubject();
 
+
     private User homeOwner;
 
     private int roomID;

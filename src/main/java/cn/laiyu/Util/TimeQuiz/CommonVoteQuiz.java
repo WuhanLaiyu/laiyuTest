@@ -107,6 +107,21 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
                 platic.add(entyr.getKey());
             }
         }
+
+        if(platic.size()>1){
+            for (String seatId:platic){
+                room.voteSubject.ticTag.clear();
+                room.voteSubject.ticTag.add(seatId);
+            }
+        }
+
+        if(platic.size()==0){
+            for(String seatId:room.voteSubject.ticTag){
+                platic.add(seatId);
+            }
+            room.voteSubject.ticTag.clear();
+        }
+
         VoteResultResMessage message=new VoteResultResMessage();
         message.ticTag=platic;
         message.voteResult=voteResult;
@@ -141,6 +156,7 @@ public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                room.voteSubject.ticTag.clear();
             }
 
         }
