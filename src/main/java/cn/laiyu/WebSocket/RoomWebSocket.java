@@ -38,6 +38,7 @@ import java.util.concurrent.ConcurrentHashMap;
         encoders = {MessageEncoder.class})
 @Component
 public class RoomWebSocket {
+
     private static int onlineCount = 0;
 
     public static ConcurrentHashMap<Session, User> sessionMap = new ConcurrentHashMap<Session, User>();
@@ -62,6 +63,12 @@ public class RoomWebSocket {
         seatState.playUser = user1;
         room.getPlaySet().put(1, seatState);
         rooms.put(10001, room);
+    }
+    static {
+        PingPongQuiz pingPongQuiz=new PingPongQuiz();
+        pingPongQuiz.rooms=rooms;
+        Thread thread=new Thread(pingPongQuiz);
+        thread.start();
     }
     @OnOpen
     public void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {

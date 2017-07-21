@@ -69,7 +69,9 @@ public class MessageDecoder implements Decoder.Text<BaseMessage> {
             case "150":
                 baseMessage=new RelayMessage();
                 break;
-
+            case "500":
+                baseMessage=new BaseMessage();
+                break;
         }
         baseMessage= JSON.parseObject(s,baseMessage.getClass());
 
