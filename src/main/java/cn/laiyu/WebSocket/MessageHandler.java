@@ -181,6 +181,9 @@ public class MessageHandler {
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
     }
 
+    public static void MessageHandle(BaseMessage message,Room room) throws IOException {
+        GameBroadCast(room,JSONObject.toJSONString(message));
+    }
 
     public static void MessageHandle(BeginCamiagnMessage message, Room room) throws IOException, InterruptedException {
         int limitSec=5;

@@ -30,7 +30,7 @@ import static cn.laiyu.WebSocket.RoomWebSocket.oneBroadCast;
 /**
  * Created by Administrator on 2017/7/17.
  */
-public class CommonVoteQuiz extends  VoteQuiz implements  Runnable{
+public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
     private int limitSec;
     private Room room;
     private ConcurrentHashMap<String,ArrayList<String>> voteResult=new ConcurrentHashMap<>();
