@@ -154,7 +154,7 @@ public class MessageHandler {
             CampiagnMessage message1=new CampiagnMessage();
             message1.campiagnSeatId=0;
             message1.statusCode="140";
-            GameBroadCast(room,JSONObject.toJSONString(message1));
+            GameBroadCast (room,JSONObject.toJSONString(message1));
             return;
         }
         message.statusCode="106";
