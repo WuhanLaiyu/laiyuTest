@@ -13,6 +13,14 @@ public class PlayUser extends User implements Vote {
         this.setOpenId(user.getOpenId());
     }
 
+    public int getSeatId() {
+        return seatId;
+    }
+
+    public void setSeatId(int seatId) {
+        this.seatId = seatId;
+    }
+
     @Override
     public void vote( ) {
 

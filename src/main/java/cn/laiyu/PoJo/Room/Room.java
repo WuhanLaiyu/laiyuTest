@@ -167,29 +167,43 @@ public class Room {
         LaiyudebugApplication.logger.info(openId+"退出了房间"+roomID+"的游戏");
 
     }
-    public synchronized void joinGame(Integer seatId, String openId) {
-        SeatState seatState=this.playSet.get(seatId);
-        if(seatState.seatState==1){
-            return;
-        }
-        User temp=new User();
-        Iterator<Map.Entry<User,Integer>> it = this.restSet.entrySet().iterator();
-        while (it.hasNext()){
-            Map.Entry<User, Integer> entry = (Map.Entry) it.next();
-            User user=entry.getKey();
-
-            if(user.getOpenId().equals(openId)){
-                temp=user;
+    public synchronized void joinGame(Integer seatId,String openId, Integer startSeatId) {
+        if(startSeatId==0){
+            SeatState seatState=this.playSet.get(seatId);
+            if(seatState.seatState==1){
+                return;
             }
+            User temp=new User();
+            Iterator<Map.Entry<User,Integer>> it = this.restSet.entrySet().iterator();
+            while (it.hasNext()){
+                Map.Entry<User, Integer> entry = (Map.Entry) it.next();
+                User user=entry.getKey();
+
+                if(user.getOpenId().equals(openId)){
+                    temp=user;
+                }
+            }
+
+            PlayUser playUser=new PlayUser(seatId,temp);
+
+            seatState.playUser=playUser;
+            seatState.seatState=1;
+            this.restSet.remove(temp);
+            this.playSet.put(seatId,seatState);
+            LaiyudebugApplication.logger.info(openId+"加入了房间"+roomID+"的游戏");
+        }else{
+            SeatState seatState=this.playSet.get(startSeatId);
+            if(playSet.get(seatId).seatState==1){
+                return;
+            }
+            playSet.put(seatId,seatState);
+            SeatState seatState1=new SeatState();
+            seatState1.playUser=null;
+            seatState1.seatState=0;
+            playSet.put(startSeatId,seatState1);
         }
 
-        PlayUser playUser=new PlayUser(seatId,temp);
 
-        seatState.playUser=playUser;
-        seatState.seatState=1;
-        this.restSet.remove(temp);
-        this.playSet.put(seatId,seatState);
-        LaiyudebugApplication.logger.info(openId+"加入了房间"+roomID+"的游戏");
 
     }
 
