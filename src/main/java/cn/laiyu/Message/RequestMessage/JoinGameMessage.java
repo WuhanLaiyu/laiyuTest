@@ -10,6 +10,8 @@ public class JoinGameMessage extends BaseMessage {
 
     private String openId;
 
+    private Integer startSeatId;
+
     public Integer getSeatId( ) {
         return seatId;
     }
@@ -18,7 +20,15 @@ public class JoinGameMessage extends BaseMessage {
         this.seatId = seatId;
     }
 
-    public String getOpenId( ) {
+    public Integer getStartSeatId() {
+        return startSeatId;
+    }
+
+    public void setStartSeatId(Integer startSeatId) {
+        this.startSeatId = startSeatId;
+    }
+
+    public String getOpenId() {
         return openId;
     }
 

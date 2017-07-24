@@ -102,8 +102,6 @@ public class CampiagnVoteQuiz implements Runnable{
             int size =temp.size();
             if(size==flag){
                 plaTic.add(""+entry.getKey());
-            }else {
-                room.voteSubject.getCampaignObservers().remove(Integer.parseInt((String)entry.getKey()));
             }
         }
         VoteResultResMessage voteResultResMessage=new VoteResultResMessage();
@@ -111,20 +109,8 @@ public class CampiagnVoteQuiz implements Runnable{
         voteResultResMessage.voteResult=voteResult;
         voteResultResMessage.statusCode="105";
         System.out.println(room.voteSubject.getCampaignObservers().size());
-        if(room.voteSubject.getCampaignObservers().size()<=1){
-            Integer maxVoteNum=room.voteSubject.getCampaignObservers().get(0);
-            if(maxVoteNum==null){
-                voteResultResMessage.campiagnSeatId=null;
-                room.campiagnSeatId=null;
-                //  room.exitGame(openId);
-                this.room.voteSubject.getCampaignObservers().clear();
-            }else {
-                voteResultResMessage.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0)+"";
-                room.campiagnSeatId=room.voteSubject.getCampaignObservers().get(0);
-                String openId=room.getPlaySet().get(maxVoteNum).playUser.getOpenId();
-                //  room.exitGame(openId);
-                this.room.voteSubject.getCampaignObservers().clear();}
-
+        if(plaTic.size()==1){
+            room.campiagnSeatId=Integer.parseInt(plaTic.get(0));
         }
         String message= JSON.toJSONString(voteResultResMessage);
         try {
@@ -133,6 +119,7 @@ public class CampiagnVoteQuiz implements Runnable{
             e.printStackTrace();
         }
         voteResult.clear();
+        room.voteSubject.getCampaignObservers().clear();
         room.voteSubject.getVoteObservers().clear();
     }
 

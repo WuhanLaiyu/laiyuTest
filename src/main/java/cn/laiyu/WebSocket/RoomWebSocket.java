@@ -72,6 +72,8 @@ public class RoomWebSocket {
     }
     @OnOpen
     public void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {
+        System.out.println(session);
+
         this.session = session;
         String qryString = session.getQueryString();// 获取上传的参数
         String decodeStr = URLDecoder.decode(qryString, "utf-8");

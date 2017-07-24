@@ -226,7 +226,7 @@ public class MessageHandler {
     }
 
     public static void MessageHandle(JoinGameMessage message,Room room) throws IOException {
-        room.joinGame(message.getSeatId(),message.getOpenId());
+        room.joinGame(message.getSeatId(),message.getOpenId() ,message.getStartSeatId());
         String homeStructure = getHomeStructure(room);
         GameBroadCast(room,homeStructure);
     }

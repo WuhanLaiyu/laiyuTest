@@ -68,7 +68,7 @@ public class CreateRoom {
     @ResponseBody
     @RequestMapping(value = "/decodeUserInfo",method = RequestMethod.POST)
     public Map decodeUserInfo(String encryptedData,String iv,String code){
-        System.out.println("11");
+        System.out.println(code);
         Map map=new HashMap();
         if(code==null||code.length()==0){
             map.put("status",0);
@@ -86,6 +86,7 @@ public class CreateRoom {
         //发送请求
 
         String sr = cn.laiyu.Controller.HttpUtil.HttpRequest.sendGet("https://api.weixin.qq.com/sns/jscode2session", params);
+        System.out.println(sr);
         //解析相应内容（转换成json对象）
         JSONObject json = JSONObject.parseObject(sr);
         //获取会话密钥（session_key）
