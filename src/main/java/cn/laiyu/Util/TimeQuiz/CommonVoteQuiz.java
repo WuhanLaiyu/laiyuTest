@@ -43,6 +43,7 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
     @Override
     public void run() {
         while(limitSec > 0){
+
             --limitSec;
             ResTimeMessage resTimeMessage=new ResTimeMessage();
             resTimeMessage.lastTime=limitSec;

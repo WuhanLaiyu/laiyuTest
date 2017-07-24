@@ -103,7 +103,7 @@ public class CampiagnVoteQuiz implements Runnable{
             if(size==flag){
                 plaTic.add(""+entry.getKey());
             }else {
-                room.voteSubject.getCampaignObservers().remove(entry.getKey());
+                room.voteSubject.getCampaignObservers().remove(Integer.parseInt((String)entry.getKey()));
             }
         }
         VoteResultResMessage voteResultResMessage=new VoteResultResMessage();
