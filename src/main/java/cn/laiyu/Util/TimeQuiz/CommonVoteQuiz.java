@@ -115,14 +115,12 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
                 room.voteSubject.ticTag.add(seatId);
             }
         }
-
         if(platic.size()==0){
             for(String seatId:room.voteSubject.ticTag){
                 platic.add(seatId);
             }
             room.voteSubject.ticTag.clear();
         }
-
         VoteResultResMessage message=new VoteResultResMessage();
         message.ticTag=platic;
         message.voteResult=voteResult;
