@@ -75,14 +75,14 @@ public class Room {
     *           1 有人坐
     *           -1 位置关闭
     * */
-    public void initRoom( ) {
-        for (int i = 1; i <= 12; i++) {
+    public void initRoom(Integer headCount) {
+        for (int i = 1; i <= headCount; i++) {
             SeatState seatState = new SeatState();
 
             seatState.seatState = 0;
             playSet.put(i, seatState);
         }
-        for (int i = 13; i <= 16; i++) {
+        for (int i = (headCount+1); i <= 16; i++) {
             SeatState seatState = new SeatState();
             seatState.seatState = -1;
             playSet.put(i, seatState);

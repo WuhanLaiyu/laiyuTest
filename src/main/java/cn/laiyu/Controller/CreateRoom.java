@@ -43,6 +43,7 @@ public class CreateRoom {
     public void createRoom(HttpServletRequest request, HttpServletResponse response) {
         String openId = request.getParameter("openId");
         String imagePath=request.getParameter("imagePath");
+        String headCount=request.getParameter("headCount");
         User user = new User();
         user.setOpenId(openId);
         user.setImagePath(imagePath);
@@ -52,7 +53,7 @@ public class CreateRoom {
         int roomId = this.roomService.addRoom(roomDTO);
 
         Room room = new Room(user, roomId);
-        room.initRoom();
+        room.initRoom(Integer.parseInt(headCount));
         RoomWebSocket.rooms.put(roomId, room);
         //返回一个roomId
         List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
@@ -100,7 +101,6 @@ public class CreateRoom {
             if (null != result && result.length() > 0) {
                 map.put("status", 1);
                 map.put("msg", "解密成功");
-
                 JSONObject userInfoJSON = JSONObject.parseObject(result);
                 Map userInfo = new HashMap();
                 userInfo.put("openId", userInfoJSON.get("openId"));
