@@ -56,7 +56,7 @@ public class RoomWebSocket {
         user.setNickName("asdasdas");
         user.setImagePath("sadasdas");
         Room room = new Room(user, 10001);
-        room.initRoom();
+        room.initRoom(12);
         SeatState seatState = new SeatState();
         PlayUser user1 = new PlayUser(1, user);
         seatState.seatState = 1;
