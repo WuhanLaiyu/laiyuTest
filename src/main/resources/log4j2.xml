@@ -22,7 +22,7 @@
             <!-- 最多备份30天以内的日志，此处为策略限制，Delete中可以按自己需要用正则表达式编写 -->
             <!-- DefaultRolloverStrategy字段中加入max=“30”经测试是配合SizeBasedTriggeringPolicy限制%i的存在数量，并没有发现是网上流传的是最多保存多少个文件的限制，也或许是我写的有问题 -->
             <DefaultRolloverStrategy>
-                <Delete basePath="E:/logs" maxDepth="1">
+                <Delete basePath="./logs" maxDepth="1">
                     <IfFileName glob="logs_*.log" />
                     <IfLastModified age="30d" />
                 </Delete>

@@ -6,6 +6,7 @@ import cn.laiyu.Message.ReponseMessage.VoteResultResMessage;
 import cn.laiyu.PoJo.Room.Room;
 import cn.laiyu.PoJo.Seat.SeatState;
 import cn.laiyu.PoJo.User.Vote;
+import cn.laiyu.PoJo.Vote.IObserver;
 import cn.laiyu.PoJo.Vote.VoteObserver;
 import com.alibaba.fastjson.JSON;
 
@@ -76,6 +77,7 @@ public class CampiagnVoteQuiz implements Runnable{
             tempArr.add(String.valueOf(voteObserver.mySeatId));
             voteResult.put(voteObserver.tagetSeatId+"",tempArr);
         }
+
         Iterator<Map.Entry<String,ArrayList<String>>> it = voteResult.entrySet().iterator();
         int flag=0;
         while(it.hasNext()){
@@ -104,6 +106,12 @@ public class CampiagnVoteQuiz implements Runnable{
                 plaTic.add(""+entry.getKey());
             }
         }
+        List<Integer> list1=room.voteSubject.getCampaignObservers();
+        for(int i=0;i<list1.size();i++){
+            if(!voteResult.containsKey(list1.get(i)+"")){
+                voteResult.put(list1.get(i)+"",new ArrayList<String>());
+            }
+        }
         VoteResultResMessage voteResultResMessage=new VoteResultResMessage();
         voteResultResMessage.ticTag=plaTic;
         voteResultResMessage.voteResult=voteResult;
@@ -119,8 +127,12 @@ public class CampiagnVoteQuiz implements Runnable{
             e.printStackTrace();
         }
         voteResult.clear();
-        room.voteSubject.getCampaignObservers().clear();
+        List<Integer> list2=room.voteSubject.getCampaignObservers();
+        for(int i=0;i<list2.size();i++){
+            if(!plaTic.contains(list2.get(i)+"")){
+                room.voteSubject.getCampaignObservers().remove(list2.get(i));
+            }
+        }
         room.voteSubject.getVoteObservers().clear();
     }
-
 }

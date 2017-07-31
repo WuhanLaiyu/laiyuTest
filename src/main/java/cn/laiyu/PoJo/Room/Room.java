@@ -89,42 +89,48 @@ public class Room {
         }
     }
 
-    public void joinRoom(User user) {
+    public synchronized void joinRoom(User user) {
         this.userSet.add(user);
         this.restSet.put(user, 0);
     }
 
-    public int exitRoom(User user) {
+    public synchronized int exitRoom(User user) {
         int flag = 0;
         this.userSet.remove(user);
         int f=0;
+
         Iterator<Map.Entry<Integer,SeatState>> itr=this.playSet.entrySet().iterator();
         while(itr.hasNext()){
             Map.Entry<Integer,SeatState> entry= itr.next();
             if(entry.getValue().playUser==null){
                 continue;
             }
-             if(user.getOpenId().equals(entry.getValue().playUser.getOpenId())){
+             if(entry.getValue().playUser.getOpenId().equals(user.getOpenId())){
                  f=1;
                  break;
              }
         }
         if (f==1) {
+            Integer seatId=null;
             Iterator<Map.Entry<Integer, SeatState>> it = this.playSet.entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry<Integer, SeatState> entry = (Map.Entry) it.next();
                 if(entry.getValue().playUser==null){
                     continue;
                 }
-                if (user.getOpenId().equals(entry.getValue().playUser.getOpenId())) {
-                    SeatState seatState=new SeatState();
-                    seatState.seatState=0;
-                    seatState.playUser=null;
-                    this.playSet.put(entry.getKey(),seatState);
+                if (entry.getValue().playUser.getOpenId().equals(user.getOpenId())) {
+                    seatId=entry.getKey();
                     flag = 1;
                     break;
                 }
             }
+            if(seatId!=null){
+                SeatState seatState=new SeatState();
+                seatState.seatState=0;
+                seatState.playUser=null;
+                playSet.put(seatId,seatState);
+            }
+
         } else {
             Iterator<Map.Entry<User, Integer>> it = this.restSet.entrySet().iterator();
             while(it.hasNext()){
@@ -136,12 +142,9 @@ public class Room {
             }
             flag = 1;
         }
-
         return flag;
     }
-
-
-    public void exitGame(String openId){
+    public synchronized void exitGame(String openId){
         Iterator<Map.Entry<Integer,SeatState>> it = this.playSet.entrySet().iterator();
         SeatState temp=new SeatState();
         Integer seadId=-1;
@@ -160,12 +163,14 @@ public class Room {
 
             }
         }
-        restSet.put((User)temp.playUser,0);
-        temp.seatState=0;
-        temp.playUser=null;
-        playSet.put(seadId,temp);
-        LaiyudebugApplication.logger.info(openId+"退出了房间"+roomID+"的游戏");
-
+        if(seadId!=-1){
+            restSet.put((User)temp.playUser,0);
+            SeatState temp1=new SeatState();
+            temp1.playUser=null;
+            temp1.seatState=0;
+            playSet.put(seadId,temp1);
+            LaiyudebugApplication.logger.info(openId+"退出了房间"+roomID+"的游戏");
+        }
     }
     public synchronized void joinGame(Integer seatId,String openId, Integer startSeatId) {
         if(startSeatId==0){

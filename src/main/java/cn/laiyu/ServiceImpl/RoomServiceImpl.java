@@ -19,6 +19,18 @@ public class RoomServiceImpl implements RoomService {
     RoomMapper roomMapper;
 
     @Override
+    public int addRoomFaker(RoomDTO roomDTO) {
+
+        this.roomMapper.addRomeFaker(roomDTO);
+        return roomDTO.getId();
+    }
+
+    @Override
+    public int getMaxId() {
+        return this.roomMapper.getMaxId();
+    }
+
+    @Override
     public RoomDTO getReleaseRoom( ) {
         return this.roomMapper.getReleaseRoom();
     }

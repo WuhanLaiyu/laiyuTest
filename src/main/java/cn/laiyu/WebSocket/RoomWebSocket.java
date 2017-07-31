@@ -71,9 +71,8 @@ public class RoomWebSocket {
         thread.start();
     }
     @OnOpen
-    public void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {
+    public synchronized void onOpen(@PathParam("roomId") int roomId, Session session) throws Exception {
         System.out.println(session);
-
         this.session = session;
         String qryString = session.getQueryString();// 获取上传的参数
         String decodeStr = URLDecoder.decode(qryString, "utf-8");
@@ -91,13 +90,24 @@ public class RoomWebSocket {
             GameBroadCast(myRoom,message);
             LaiyudebugApplication.logger.info(user.getOpenId()+"加入了房间"+roomId);
         }
-
     }
 
     @OnClose
-    public void onClose(@PathParam("roomId") int roomId, Session session) throws IOException {
+    public synchronized void onClose(@PathParam("roomId") int roomId, Session session) throws IOException {
         User user = this.sessionMap.get(session);
         Room myRoom = rooms.get(roomId);
+        User homeOwner=myRoom.getHomeOwner();
+        if(homeOwner.getOpenId().equals(user.getOpenId())){
+            HashMap playSet=myRoom.getPlaySet();
+            Iterator<Map.Entry<Integer, SeatState>> it = playSet.entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry<Integer, SeatState> entry=it.next();
+                if(entry.getValue().playUser!=null){
+                    myRoom.setHomeOwner((User)entry.getValue().playUser);
+                    break;
+                }
+            }
+        }
         myRoom.exitRoom(user);
         String message = getHomeStructure(myRoom);
         GameBroadCast(myRoom,message);
@@ -114,7 +124,7 @@ public class RoomWebSocket {
 
 
 
-    public static String getHomeStructure(Room myRoom) {
+    public synchronized static  String getHomeStructure(Room myRoom) {
         RoomMessage roomMessage = new RoomMessage();
         roomMessage.statusCode = 201;
         roomMessage.homeOwner = myRoom.getHomeOwner().getOpenId();

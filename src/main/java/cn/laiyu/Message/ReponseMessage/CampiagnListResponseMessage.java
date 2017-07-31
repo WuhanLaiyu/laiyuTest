@@ -10,6 +10,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class CampiagnListResponseMessage extends BaseMessage {
     public List<String> campiagnList=new CopyOnWriteArrayList<>();
-
+    public String water;
     public List<String>  ticTag=new CopyOnWriteArrayList<>();
 }
