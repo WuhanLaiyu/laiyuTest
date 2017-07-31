@@ -44,7 +44,7 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
     public void run() {
 
         while(limitSec > 0){
-            /*int num=0;
+            int num=0;
             Iterator<Map.Entry<Integer,SeatState>> it=room.getPlaySet().entrySet().iterator();
             while(it.hasNext()){
                 Map.Entry<Integer,SeatState> entry=it.next();
@@ -54,7 +54,7 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
             }
             if(room.voteSubject.getVoteObservers().size()==num){
                 break;
-            }*/
+            }
             --limitSec;
             ResTimeMessage resTimeMessage=new ResTimeMessage();
             resTimeMessage.lastTime=limitSec;
