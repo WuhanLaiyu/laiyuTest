@@ -185,6 +185,7 @@ public class MessageHandler {
         }
         camListResMes.statusCode="104";
         camListResMes.ticTag=room.voteSubject.ticTag;
+        camListResMes.water=message.seatId+"";
         GameBroadCast(room,JSONObject.toJSONString(camListResMes));
     }
 

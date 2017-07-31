@@ -42,7 +42,19 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
 
     @Override
     public void run() {
+
         while(limitSec > 0){
+            /*int num=0;
+            Iterator<Map.Entry<Integer,SeatState>> it=room.getPlaySet().entrySet().iterator();
+            while(it.hasNext()){
+                Map.Entry<Integer,SeatState> entry=it.next();
+                if(entry.getValue().seatState==1){
+                    num+=1;
+                }
+            }
+            if(room.voteSubject.getVoteObservers().size()==num){
+                break;
+            }*/
             --limitSec;
             ResTimeMessage resTimeMessage=new ResTimeMessage();
             resTimeMessage.lastTime=limitSec;
@@ -153,6 +165,9 @@ public class CommonVoteQuiz extends PingPongQuiz implements  Runnable{
                     oneBroadCast(room, JSONObject.toJSONString(message2), playUser.getOpenId());
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+                if (platic.get(0).equals(room.campiagnSeatId+"")){
+                    room.campiagnSeatId=null;
                 }
                 room.voteSubject.ticTag.clear();
             }

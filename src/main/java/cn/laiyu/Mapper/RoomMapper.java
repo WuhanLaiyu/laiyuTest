@@ -16,9 +16,16 @@ public interface RoomMapper {
             @Result(column = "userName", property = "userName", javaType = String.class),
             @Result(column = "is_alive", property = "isAlive", javaType = Integer.class)
     })
-    RoomDTO getReleaseRoom( );
+    RoomDTO getReleaseRoom();
+
+    @Select("select Id from room order by  Id desc limit 1")
+    int getMaxId();
 
     @Insert("insert into room(openId,is_alive) values(#{RoomDTO.openId},1)")
     @Options(useGeneratedKeys = true, keyProperty = "RoomDTO.id")
     void addRome(@Param("RoomDTO") RoomDTO roomDTO);
+
+    @Insert("insert into room(Id,openId,is_alive) values(#{RoomDTO.id},#{RoomDTO.openId},1)")
+    @Options(useGeneratedKeys = true, keyProperty = "RoomDTO.id")
+    void addRomeFaker(@Param("RoomDTO") RoomDTO roomDTO);
 }

@@ -10,4 +10,8 @@ public interface RoomService {
     RoomDTO getReleaseRoom( );
 
     int addRoom(RoomDTO roomDTO);
+
+    int getMaxId();
+
+    int addRoomFaker(RoomDTO roomDTO);
 }

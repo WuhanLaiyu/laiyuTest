@@ -39,6 +39,11 @@ public class CreateRoom {
     @Resource
     private RoomService roomService;
 
+    @RequestMapping("/test")
+    public void test(HttpServletRequest request, HttpServletResponse response){
+        System.out.println(this.roomService.getMaxId());
+
+    }
     @RequestMapping("/create")
     public void createRoom(HttpServletRequest request, HttpServletResponse response) {
         String openId = request.getParameter("openId");
@@ -49,8 +54,11 @@ public class CreateRoom {
         user.setImagePath(imagePath);
 
         RoomDTO roomDTO = new RoomDTO();
+        int x=(int)(Math.random()*3)+2;
+        int id=x+this.roomService.getMaxId();
+        roomDTO.setId(id);
         roomDTO.setUserName(user.getOpenId());
-        int roomId = this.roomService.addRoom(roomDTO);
+        int roomId = this.roomService.addRoomFaker(roomDTO);
 
         Room room = new Room(user, roomId);
         room.initRoom(Integer.parseInt(headCount));
